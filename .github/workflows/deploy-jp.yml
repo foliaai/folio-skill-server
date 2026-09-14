@@ -13,7 +13,12 @@ jobs:
         run: |
           set -e
           cd ${{ secrets.JP_DEPLOY_PATH }}/skill_service
-          git pull origin jp_model_lake_adapt
+          # 部署目录必须以远端为准。裸 git pull 在目录里残留过本地提交时会
+          # "Need to specify how to reconcile divergent branches" 直接 fatal；
+          # fetch 用默认 refspec（带 +，远端强推过也能对齐）后再 reset --hard。
+          git fetch --prune origin
+          git log --oneline origin/jp_model_lake_adapt..HEAD || true
+          git reset --hard origin/jp_model_lake_adapt
           docker compose -f docker-compose.jp.yml up -d --build
           docker image prune -f
           echo "✅ Skill Service JP deployed at $(date)"
