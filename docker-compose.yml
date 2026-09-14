@@ -11,9 +11,14 @@ services:
     networks:
       - skill-network
       - mysql_default
+      # MinIO 的端点写的是容器名 milvus-minio:9000，只有和它同处一个
+      # docker 网络才能解析；缺这条会在启动阶段 NameResolutionError 直接退出。
+      - milvus-gpu_default
 
 networks:
   skill-network:
     driver: bridge
   mysql_default:
+    external: true
+  milvus-gpu_default:
     external: true
