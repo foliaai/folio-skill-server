@@ -12,7 +12,7 @@ jobs:
       - name: Deploy Skill Service JP
         run: |
           set -e
-          cd ${{ secrets.JP_DEPLOY_PATH }}/skill_service
+          cd ${{ secrets.JP_DEPLOY_PATH }}/folio-skill-server
           # 部署目录必须以远端为准。裸 git pull 在目录里残留过本地提交时会
           # "Need to specify how to reconcile divergent branches" 直接 fatal；
           # fetch 用默认 refspec（带 +，远端强推过也能对齐）后再 reset --hard。
